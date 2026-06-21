@@ -4,7 +4,7 @@ export const forgotPasswordTemplate = (resetLink: string) => {
 <html lang="en"> 
 <head> 
     <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <meta name="viewPORT" content="width=device-width, initial-scale=1.0"> 
     <title>Reset Your Password</title> 
     <style> 
         body { 
@@ -136,7 +136,7 @@ for security reasons.
                              
                             <p class="text-muted"> 
                                 If you didn't request a password reset, please ignore this 
-email or contact support if you have concerns. 
+email or contact supPORT if you have concerns. 
                             </p> 
                         </td> 
                     </tr> 
@@ -145,7 +145,7 @@ email or contact support if you have concerns.
                     <tr> 
                         <td class="footer"> 
                             <p class="footer-text"> 
-                                © 2025 Job Portal. All rights reserved. 
+                                © 2025 Job PORTal. All rights reserved. 
                             </p> 
                             <p class="footer-text"> 
                                 This is an automated message, please do not reply. 

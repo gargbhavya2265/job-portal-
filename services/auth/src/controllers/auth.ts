@@ -59,7 +59,7 @@ export const registerUser = TryCatch(async (req, res, next) => {
 
   const token = jwt.sign(
     { id: registeredUser?.user_id },
-    process.env.JWT_SEC as string,
+    process.env.JWT_SECRET as string,
     {
       expiresIn: "15d",
     }
@@ -103,7 +103,7 @@ export const loginUser = TryCatch(async (req, res, next) => {
 
   const token = jwt.sign(
     { id: userObject?.user_id },
-    process.env.JWT_SEC as string,
+    process.env.JWT_SECRET as string,
     {
       expiresIn: "15d",
     }
@@ -138,11 +138,11 @@ export const forgotPassword = TryCatch(async (req, res, next) => {
       email: user.email,
       type: "reset",
     },
-    process.env.JWT_SEC as string,
+    process.env.JWT_SECRET as string,
     { expiresIn: "15m" }
   );
 
-  const resetLink = `${process.env.Frontend_Url}/reset/${resetToken}`;
+  const resetLink = `${process.env.FRONTEND_URL}/reset/${resetToken}`;
 
   await redisClient.set(`forgot:${email}`, resetToken, {
     EX: 900,
@@ -170,7 +170,7 @@ export const resetPassword = TryCatch(async (req, res, next) => {
   let decoded: any;
 
   try {
-    decoded = jwt.verify(token as string, process.env.JWT_SEC as string);  } catch (error) {
+    decoded = jwt.verify(token as string, process.env.JWT_SECRET as string);  } catch (error) {
     throw new ErrorHandler(400, "Expired token");
   }
 

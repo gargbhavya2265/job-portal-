@@ -8,7 +8,7 @@ export const startSendMailConsumer = async () => {
   try {
     const kafka = new Kafka({
       clientId: "mail-service",
-      brokers: [process.env.Kafka_Broker || "localhost:9092"],
+      brokers: [process.env.KAFKA_BROKER || "localhost:9092"],
     });
 
     const consumer = kafka.consumer({ groupId: "mail-service-group" });
@@ -28,9 +28,9 @@ export const startSendMailConsumer = async () => {
             message.value?.toString() || "{}"
           );
 
-          const transporter = nodemailer.createTransport({
+          const transPORTer = nodemailer.createTransPORT({
             host: "smtp.gmail.com",
-            port: 465,
+            PORT: 465,
             secure: true,
             auth: {
               user: process.env.SMTP_USER,
@@ -38,7 +38,7 @@ export const startSendMailConsumer = async () => {
             },
           });
 
-          await transporter.sendMail({
+          await transPORTer.sendMail({
             from: "Hireheaven <no-reply>",
             to,
             subject,

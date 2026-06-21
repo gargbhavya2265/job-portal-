@@ -32,7 +32,7 @@ const Hero = () => {
 
             {/* descripiton */}
             <p className="text-lg md:text-xl leading-relaxed opacity-80 max-w-2xl">
-              Connect with top employers and discover opportunities that match
+              Connect with top employers and discover opPORTunities that match
               your skills. Wheather you're a job seeker or recruiter, we've got
               you covered with powerful tools and seamless experience.
             </p>

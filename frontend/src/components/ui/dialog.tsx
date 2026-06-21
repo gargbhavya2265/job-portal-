@@ -18,10 +18,10 @@ function DialogTrigger({
   return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />
 }
 
-function DialogPortal({
+function DialogPORTal({
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Portal>) {
-  return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />
+}: React.ComponentProps<typeof DialogPrimitive.PORTal>) {
+  return <DialogPrimitive.PORTal data-slot="dialog-PORTal" {...props} />
 }
 
 function DialogClose({
@@ -55,7 +55,7 @@ function DialogContent({
   showCloseButton?: boolean
 }) {
   return (
-    <DialogPortal data-slot="dialog-portal">
+    <DialogPORTal data-slot="dialog-PORTal">
       <DialogOverlay />
       <DialogPrimitive.Content
         data-slot="dialog-content"
@@ -76,7 +76,7 @@ function DialogContent({
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Content>
-    </DialogPortal>
+    </DialogPORTal>
   )
 }
 
@@ -137,7 +137,7 @@ export {
   DialogFooter,
   DialogHeader,
   DialogOverlay,
-  DialogPortal,
+  DialogPORTal,
   DialogTitle,
   DialogTrigger,
 }

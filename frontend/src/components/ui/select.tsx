@@ -58,7 +58,7 @@ function SelectContent({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Content>) {
   return (
-    <SelectPrimitive.Portal>
+    <SelectPrimitive.PORTal>
       <SelectPrimitive.Content
         data-slot="select-content"
         className={cn(
@@ -72,7 +72,7 @@ function SelectContent({
         {...props}
       >
         <SelectScrollUpButton />
-        <SelectPrimitive.Viewport
+        <SelectPrimitive.ViewPORT
           className={cn(
             "p-1",
             position === "popper" &&
@@ -80,10 +80,10 @@ function SelectContent({
           )}
         >
           {children}
-        </SelectPrimitive.Viewport>
+        </SelectPrimitive.ViewPORT>
         <SelectScrollDownButton />
       </SelectPrimitive.Content>
-    </SelectPrimitive.Portal>
+    </SelectPrimitive.PORTal>
   )
 }
 

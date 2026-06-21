@@ -4,7 +4,7 @@ export const applicationStatusUpdateTemplate = (jobTitle: string) => {
 <html lang="en"> 
 <head> 
     <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <meta name="viewPORT" content="width=device-width, initial-scale=1.0"> 
     <title>Application Status Update</title> 
     <style> 
         body { 

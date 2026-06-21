@@ -332,7 +332,7 @@ export const updateApplication = TryCatch(
 
     const message = {
       to: application.applicant_email,
-      subject: "Application Update - Job portal",
+      subject: "Application Update - Job PORTal",
       html: applicationStatusUpdateTemplate(job.title),
     };
 
