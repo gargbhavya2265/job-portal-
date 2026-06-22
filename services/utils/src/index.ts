@@ -7,7 +7,9 @@ import { startSendMailConsumer } from "./consumer.js";
 
 dotenv.config();
 
-startSendMailConsumer();
+startSendMailConsumer().catch((err) => {
+  console.error("Kafka consumer failed:", err);
+});
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,

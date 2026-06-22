@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
 dotenv.config();
-
+console.log("🔥 Starting Kafka consumer...");
 export const startSendMailConsumer = async () => {
   try {
     const kafka = new Kafka({
@@ -28,9 +28,9 @@ export const startSendMailConsumer = async () => {
             message.value?.toString() || "{}"
           );
 
-          const transPORTer = nodemailer.createTransPORT({
+          const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
-            PORT: 465,
+            port: 465,
             secure: true,
             auth: {
               user: process.env.SMTP_USER,
@@ -38,7 +38,7 @@ export const startSendMailConsumer = async () => {
             },
           });
 
-          await transPORTer.sendMail({
+          await transporter.sendMail({
             from: "Hireheaven <no-reply>",
             to,
             subject,
