@@ -2,14 +2,24 @@ import { Kafka, Producer, Admin } from "kafkajs";
 import dotenv from "dotenv";
 dotenv.config();
 
-let producer: Producer;
-let admin: Admin;
+let producer: Producer | null = null;
+let admin: Admin | null = null;
 
+const KAFKA_ENABLED =
+  typeof process.env.KAFKA_BROKER === "string" &&
+  process.env.KAFKA_BROKER.trim().length > 0;
+
+  
 export const connectKafka = async () => {
+  if (!KAFKA_ENABLED) {
+    console.log("⚠️ Kafka disabled - skipping connection");
+    return;
+  }
+
   try {
     const kafka = new Kafka({
       clientId: "auth-service",
-      brokers: [process.env.KAFKA_BROKER || "localhost:9092"],
+      brokers: [process.env.KAFKA_BROKER!],
     });
 
     admin = kafka.admin();
@@ -33,24 +43,24 @@ export const connectKafka = async () => {
     await admin.disconnect();
 
     producer = kafka.producer();
-
     await producer.connect();
 
-    console.log("✅ connected to kafka producer");
+    console.log("✅ Kafka producer connected");
   } catch (error) {
-    console.log("Failed to connect to kafka", error);
+    console.log("Kafka connection failed:", error);
   }
 };
 
+
 export const publishToTopic = async (topic: string, message: any) => {
-  if (!producer) {
-    console.log("kafka producer is not initialized");
+  if (!KAFKA_ENABLED || !producer) {
+    console.log("⚠️ Kafka disabled - skipping message publish");
     return;
   }
 
   try {
     await producer.send({
-      topic: topic,
+      topic,
       messages: [
         {
           value: JSON.stringify(message),
@@ -62,8 +72,9 @@ export const publishToTopic = async (topic: string, message: any) => {
   }
 };
 
+
 export const disconnectKafka = async () => {
-  if (producer) {
-    producer.disconnect();
-  }
+  if (!producer || !KAFKA_ENABLED) return;
+
+  await producer.disconnect();
 };
