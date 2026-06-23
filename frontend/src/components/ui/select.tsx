@@ -58,7 +58,7 @@ function SelectContent({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Content>) {
   return (
-    <SelectPrimitive.PORTal>
+    <SelectPrimitive.Portal>
       <SelectPrimitive.Content
         data-slot="select-content"
         className={cn(
@@ -83,7 +83,7 @@ function SelectContent({
         </SelectPrimitive.ViewPORT>
         <SelectScrollDownButton />
       </SelectPrimitive.Content>
-    </SelectPrimitive.PORTal>
+    </SelectPrimitive.Portal>
   )
 }
 
