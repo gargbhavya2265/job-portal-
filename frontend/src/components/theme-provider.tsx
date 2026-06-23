@@ -1,5 +1,3 @@
-git commit -m "fix: update lockfile after clean install in utils service""use client";
-
 import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
