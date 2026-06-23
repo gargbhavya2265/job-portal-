@@ -5,13 +5,21 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import Cookies from "js-cookie";
 import axios from "axios";
+export const utils_service =
+  "https://job-portal-utilsservice.onrender.com";
 
-export const utils_service = "http://35.154.186.96:5001";
-export const auth_service = "http://35.154.186.96:5000";
-export const user_service = "http://35.154.186.96:5002";
-export const job_service = "http://35.154.186.96:5003";
-export const payment_service = "http://35.154.186.96:5004";
+export const auth_service =
+  "https://job-portal-auth-i5fu.onrender.com";
 
+export const user_service =
+  "https://job-portal-userservice.onrender.com";
+
+export const job_service =
+  "https://job-portal-jobservice.onrender.com";
+
+export const payment_service =
+  "https://job-portal-paymentservice.onrender.com";
+  
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
