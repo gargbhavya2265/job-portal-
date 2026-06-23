@@ -5,6 +5,8 @@ import { connectKafka } from "./producer.js";
 
 dotenv.config();
 
+connectKafka();
+
 async function initDB() {
   try {
     await sql`
@@ -76,23 +78,10 @@ async function initDB() {
   }
 }
 
-initDB().then(async () => {
-  // optional Kafka (safe deployment)
-  if (process.env.KAFKA_ENABLED === "true") {
-    try {
-      await connectKafka();
-      console.log("Kafka enabled for job service");
-    } catch (err) {
-      console.log("Kafka failed but service will continue", err);
-    }
-  } else {
-    console.log("Kafka disabled for job service");
-  }
-
+initDB().then(() => {
   app.listen(process.env.PORT, () => {
     console.log(
       `Job service is running on http://localhost:${process.env.PORT}`
     );
   });
 });
-  
