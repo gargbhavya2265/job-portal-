@@ -3,26 +3,42 @@ import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
 dotenv.config();
+
+const KAFKA_ENABLED =
+  typeof process.env.KAFKA_BROKER === "string" &&
+  process.env.KAFKA_BROKER.trim().length > 0;
+
 console.log("🔥 Starting Kafka consumer...");
+
 export const startSendMailConsumer = async () => {
+  if (!KAFKA_ENABLED) {
+    console.log("⚠️ Kafka disabled - skipping consumer");
+    return;
+  }
+
   try {
     const kafka = new Kafka({
       clientId: "mail-service",
-      brokers: [process.env.KAFKA_BROKER || "localhost:9092"],
+      brokers: [process.env.KAFKA_BROKER!],
     });
 
-    const consumer = kafka.consumer({ groupId: "mail-service-group" });
+    const consumer = kafka.consumer({
+      groupId: "mail-service-group",
+    });
 
     await consumer.connect();
 
     const topicName = "send-mail";
 
-    await consumer.subscribe({ topic: topicName, fromBeginning: false });
+    await consumer.subscribe({
+      topic: topicName,
+      fromBeginning: false,
+    });
 
-    console.log("✅ Mail service consumer started, listening for sending mail");
+    console.log("✅ Mail service consumer started");
 
     await consumer.run({
-      eachMessage: async ({ topic, partition, message }) => {
+      eachMessage: async ({ message }) => {
         try {
           const { to, subject, html } = JSON.parse(
             message.value?.toString() || "{}"
@@ -39,19 +55,19 @@ export const startSendMailConsumer = async () => {
           });
 
           await transporter.sendMail({
-            from: "Hireheaven <no-reply>",
+            from: "HireHeaven <no-reply@hireheaven.com>",
             to,
             subject,
             html,
           });
 
-          console.log(`Mail has been sent to ${to}`);
+          console.log(`✅ Mail sent to ${to}`);
         } catch (error) {
-          console.log("Failed to send mail", error);
+          console.log("Failed to send mail:", error);
         }
       },
     });
   } catch (error) {
-    console.log("failed to start kafka consumer", error);
+    console.log("Kafka consumer failed:", error);
   }
 };

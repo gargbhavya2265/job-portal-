@@ -7,7 +7,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-connectKafka();
+if (process.env.KAFKA_BROKER?.trim()) {
+  connectKafka();
+} else {
+  console.log("⚠️ Kafka disabled - skipping connection");
+}
 
 app.use("/api/auth", authRoutes);
 
