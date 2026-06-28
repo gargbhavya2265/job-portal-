@@ -10,6 +10,13 @@ import { publishToTopic } from "../producer.js";
 import { redisClient } from "../index.js";
 
 export const registerUser = TryCatch(async (req, res, next) => {
+  
+  console.log("========== INSIDE CONTROLLER ==========");
+  console.log("BODY:", req.body);
+  console.log("FILE:", req.file);
+  console.log("=======================================");
+  
+  
   const { name, email, password, phoneNumber, role, bio } = req.body;
 
   if (!name || !email || !password || !phoneNumber || !role) {
