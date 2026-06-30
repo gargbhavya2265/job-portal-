@@ -46,17 +46,54 @@ export const registerUser = TryCatch(async (req, res, next) => {
     if (!file) {
       throw new ErrorHandler(400, "Resume file is required for jobseekers");
     }
+    console.log("✅ Step 1: File received");
 
     const fileBuffer = getBuffer(file);
+
+    console.log("✅ Step 2: Buffer generated");
+    console.log("UPLOAD_SERVICE =", process.env.UPLOAD_SERVICE);
 
     if (!fileBuffer || !fileBuffer.content) {
       throw new ErrorHandler(500, "Failed to generate buffer");
     }
 
-    const { data } = await axios.post(
-      `${process.env.UPLOAD_SERVICE}/api/utils/upload`,
-      { buffer: fileBuffer.content }
-    );
+    try {
+  console.log("✅ Step 3: Calling Upload Service");
+
+  const { data } = await axios.post(
+    `${process.env.UPLOAD_SERVICE}/api/utils/upload`,
+    {
+      buffer: fileBuffer.content,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  console.log("✅ Step 4: Upload Success");
+  console.log(data);
+
+  const [user] =
+    await sql`INSERT INTO users (name, email, password, phone_number, role, bio, resume, resume_public_id)
+              VALUES (${name}, ${email}, ${hashPassword}, ${phoneNumber}, ${role}, ${bio}, ${data.url}, ${data.public_id})
+              RETURNING user_id, name, email, phone_number, role, bio, resume, created_at`;
+
+    console.log("✅ Step 5: User Inserted");
+
+    registeredUser = user;
+
+  } catch (err: any) {
+    console.log("❌ Upload/DB Error");
+    console.log("Message:", err.message);
+    console.log("Status:", err.response?.status);
+    console.log("Response:", err.response?.data);
+    console.log("Stack:", err.stack);
+
+    throw err;
+  }
+    
     const [user] =
       await sql`INSERT INTO users (name, email, password, phone_number, role, bio, resume, resume_public_id) VALUES 
                (${name}, ${email}, ${hashPassword}, ${phoneNumber}, ${role}, ${bio}, ${data.url}, ${data.public_id}) RETURNING user_id, name, email, phone_number, role, bio, resume, created_at`;

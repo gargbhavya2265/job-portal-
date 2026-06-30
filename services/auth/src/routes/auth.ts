@@ -13,11 +13,12 @@ router.post(
   "/register",
   uploadFile,
   (req, res, next) => {
-    console.log("========== AFTER MULTER ==========");
-    console.log("Content-Type:", req.headers["content-type"]);
+    console.log("Method:", req.method);
+    console.log("URL:", req.originalUrl);
+    console.log("Headers object:", req.headers);
+    console.log("Content-Type:", req.get("content-type"));
     console.log("Body:", req.body);
     console.log("File:", req.file);
-    console.log("==================================");
     next();
   },
   registerUser
