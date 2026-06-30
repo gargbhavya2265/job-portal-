@@ -8,8 +8,7 @@ import axios from "axios";
 export const utils_service =
   "https://job-portal-utilsservice.onrender.com";
 
-export const auth_service =
-  "https://job-portal-auth-i5fu.onrender.com";
+export const auth_service = "https://job-portal-auth-i5fu.onrender.com";
 
 export const user_service =
   "https://job-portal-userservice.onrender.com";
