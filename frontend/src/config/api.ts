@@ -5,3 +5,5 @@ export const API = {
   UTILS: process.env.NEXT_PUBLIC_UTILS_SERVICE!,
   PAYMENT: process.env.NEXT_PUBLIC_PAYMENT_SERVICE!,
 };
+
+console.log("API CONFIG:", API);
