@@ -67,17 +67,9 @@ export const registerUser = TryCatch(async (req, res, next) => {
 
     try {
 
-      const { data } = await axios.post(
-        `${process.env.UPLOAD_SERVICE}/api/utils/upload`,
-        {
-          buffer: fileBuffer.content,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const { data } =await axios.post(`${process.env.UPLOAD_SERVICE}/api/utils/upload`, {
+        buffer: fileBuffer.content
+      });
 
       console.log("✅ Step 4: Upload Success");
       console.log(data);

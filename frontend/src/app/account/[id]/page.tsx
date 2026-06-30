@@ -1,5 +1,5 @@
 "use client";
-import { user_service } from "@/context/AppContext";
+import { API } from "@/config/api";
 import { User } from "@/type";
 import axios from "axios";
 import { useParams } from "next/navigation";
@@ -18,7 +18,7 @@ const UserAccount = () => {
   async function fetchUser() {
     const token = Cookies.get("token");
     try {
-      const { data } = await axios.get(`${user_service}/api/user/${id}`, {
+      const { data } = await axios.get(`${API.USER}/api/user/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -3,6 +3,7 @@ import { useParams } from "next/navigation";
 import Cookies from "js-cookie";
 import React, { useEffect, useRef, useState } from "react";
 import {useAppData } from "@/context/AppContext";
+import { API } from "@/config/api";
 import { Company, Job } from "@/type";
 import axios from "axios";
 import Loading from "@/components/loading";

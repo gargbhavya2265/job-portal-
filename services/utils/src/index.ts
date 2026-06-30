@@ -7,13 +7,25 @@ import { startSendMailConsumer } from "./consumer.js";
 
 dotenv.config();
 
-startSendMailConsumer();
+if (process.env.KAFKA_BROKER) {
+  startSendMailConsumer();
+} else {
+  console.log("Kafka not configured");
+}
 
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET,
-});
+if (
+  process.env.CLOUD_NAME &&
+  process.env.API_KEY &&
+  process.env.API_SECRET
+) {
+  cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET,
+  });
+} else {
+  console.log("Cloudinary env missing");
+}
 
 const app = express();
 app.use(cors());
@@ -23,8 +35,8 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 app.use("/api/utils", routes);
 
-app.listen(process.env.PORT, () => {
-  console.log(
-    `Utils Service is running on http://localhost:${process.env.PORT}`
-  );
+const PORT = process.env.PORT || 5001;
+
+app.listen(PORT, () => {
+  console.log(`Utils Service running on PORT: ${PORT}`);
 });
