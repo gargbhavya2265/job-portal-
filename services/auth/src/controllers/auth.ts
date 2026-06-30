@@ -10,13 +10,11 @@ import { publishToTopic } from "../producer.js";
 import { redisClient } from "../index.js";
 
 export const registerUser = TryCatch(async (req, res, next) => {
-  
   console.log("========== INSIDE CONTROLLER ==========");
   console.log("BODY:", req.body);
   console.log("FILE:", req.file);
   console.log("=======================================");
-  
-  
+
   const { name, email, password, phoneNumber, role, bio } = req.body;
 
   if (!name || !email || !password || !phoneNumber || !role) {
@@ -35,17 +33,25 @@ export const registerUser = TryCatch(async (req, res, next) => {
   let registeredUser;
 
   if (role === "recruiter") {
-    const [user] =
-      await sql`INSERT INTO users (name, email, password, phone_number, role) VALUES 
-               (${name}, ${email}, ${hashPassword}, ${phoneNumber}, ${role}) RETURNING user_id, name, email, phone_number, role, created_at`;
+    const [user] = await sql`
+      INSERT INTO users
+      (name, email, password, phone_number, role)
+      VALUES
+      (${name}, ${email}, ${hashPassword}, ${phoneNumber}, ${role})
+      RETURNING user_id, name, email, phone_number, role, created_at
+    `;
 
     registeredUser = user;
-  } else if (role === "jobseeker") {
+  }
+
+  else if (role === "jobseeker") {
+
     const file = req.file;
 
     if (!file) {
       throw new ErrorHandler(400, "Resume file is required for jobseekers");
     }
+
     console.log("✅ Step 1: File received");
 
     const fileBuffer = getBuffer(file);
@@ -57,49 +63,67 @@ export const registerUser = TryCatch(async (req, res, next) => {
       throw new ErrorHandler(500, "Failed to generate buffer");
     }
 
+    console.log("✅ Step 3: Calling Upload Service");
+
     try {
-  console.log("✅ Step 3: Calling Upload Service");
 
-  const { data } = await axios.post(
-    `${process.env.UPLOAD_SERVICE}/api/utils/upload`,
-    {
-      buffer: fileBuffer.content,
-    },
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
+      const { data } = await axios.post(
+        `${process.env.UPLOAD_SERVICE}/api/utils/upload`,
+        {
+          buffer: fileBuffer.content,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("✅ Step 4: Upload Success");
+      console.log(data);
+
+      const [user] = await sql`
+        INSERT INTO users
+        (name, email, password, phone_number, role, bio, resume, resume_public_id)
+        VALUES
+        (
+          ${name},
+          ${email},
+          ${hashPassword},
+          ${phoneNumber},
+          ${role},
+          ${bio},
+          ${data.url},
+          ${data.public_id}
+        )
+        RETURNING
+        user_id,
+        name,
+        email,
+        phone_number,
+        role,
+        bio,
+        resume,
+        created_at
+      `;
+
+      console.log("✅ Step 5: User Inserted");
+
+      registeredUser = user;
+
+    } catch (err: any) {
+
+      console.log("❌ Upload Error");
+      console.log("Message:", err.message);
+      console.log("Status:", err.response?.status);
+      console.log("Response:", err.response?.data);
+      console.log("Stack:", err.stack);
+
+      throw err;
     }
-  );
-
-  console.log("✅ Step 4: Upload Success");
-  console.log(data);
-
-  const [user] =
-    await sql`INSERT INTO users (name, email, password, phone_number, role, bio, resume, resume_public_id)
-              VALUES (${name}, ${email}, ${hashPassword}, ${phoneNumber}, ${role}, ${bio}, ${data.url}, ${data.public_id})
-              RETURNING user_id, name, email, phone_number, role, bio, resume, created_at`;
-
-    console.log("✅ Step 5: User Inserted");
-
-    registeredUser = user;
-
-  } catch (err: any) {
-    console.log("❌ Upload/DB Error");
-    console.log("Message:", err.message);
-    console.log("Status:", err.response?.status);
-    console.log("Response:", err.response?.data);
-    console.log("Stack:", err.stack);
-
-    throw err;
   }
-    
-    const [user] =
-      await sql`INSERT INTO users (name, email, password, phone_number, role, bio, resume, resume_public_id) VALUES 
-               (${name}, ${email}, ${hashPassword}, ${phoneNumber}, ${role}, ${bio}, ${data.url}, ${data.public_id}) RETURNING user_id, name, email, phone_number, role, bio, resume, created_at`;
 
-    registeredUser = user;
-  }
+  // ===== This part should be OUTSIDE if-else =====
 
   const token = jwt.sign(
     { id: registeredUser?.user_id },
