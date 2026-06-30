@@ -1,5 +1,6 @@
 "use client";
-import { job_service, useAppData } from "@/context/AppContext";
+import {useAppData } from "@/context/AppContext";
+import { API } from "@/config/api";
 import React, { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -59,7 +60,7 @@ const Company = () => {
 
   async function fetchCompanies() {
     try {
-      const { data } = await axios.get(`${job_service}/api/job/company/all`, {
+      const { data } = await axios.get(`${API.JOB}/api/job/company/all`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -88,7 +89,7 @@ const Company = () => {
     try {
       setBtnLoading(true);
       const { data } = await axios.post(
-        `${job_service}/api/job/company/new`,
+        `${API.JOB}/api/job/company/new`,
         formData,
         {
           headers: {
@@ -111,7 +112,7 @@ const Company = () => {
       try {
         setBtnLoading(true);
         const { data } = await axios.delete(
-          `${job_service}/api/job/company/${id}`,
+          `${API.JOB}/api/job/company/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

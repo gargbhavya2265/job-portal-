@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import { ResumeAnalysisResponse } from "@/type";
-import { utils_service } from "@/context/AppContext";
+import { API } from "@/config/api";
 import toast from "react-hot-toast";
 
 const ResumeAnalyzer = () => {
@@ -67,7 +67,7 @@ const ResumeAnalyzer = () => {
     try {
       const base64 = await convertToBase64(file);
       const { data } = await axios.post(
-        `${utils_service}/api/utils/resume-analyser`,
+        `${API.UTILS}/api/utils/resume-analyser`,
         {
           pdfBase64: base64,
         }

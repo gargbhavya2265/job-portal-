@@ -24,7 +24,7 @@ import {
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import { utils_service } from "@/context/AppContext";
+import { API } from "@/config/api";
 import toast from "react-hot-toast";
 
 const CarrerGuide = () => {
@@ -58,7 +58,7 @@ const CarrerGuide = () => {
     }
     setLoading(true);
     try {
-      const { data } = await axios.post(`${utils_service}/api/utils/career`, {
+      const { data } = await axios.post(`${API.UTILS}/api/utils/career`, {
         skills: skills,
       });
 

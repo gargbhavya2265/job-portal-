@@ -2,7 +2,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { auth_service, useAppData } from "@/context/AppContext";
+import {useAppData } from "@/context/AppContext";
+import { API } from "@/config/api";
 import axios from "axios";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -20,7 +21,7 @@ const ForgotPage = () => {
     e.preventDefault();
     setbtnLoading(true);
     try {
-      const { data } = await axios.post(`${auth_service}/api/auth/forgot`, {
+      const { data } = await axios.post(`${API.AUTH}/api/auth/forgot`, {
         email,
       });
 

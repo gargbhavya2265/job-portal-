@@ -4,7 +4,8 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
-import { payment_service, useAppData } from "@/context/AppContext";
+import {useAppData } from "@/context/AppContext";
+import { API } from "@/config/api";
 import toast from "react-hot-toast";
 import Loading from "@/components/loading";
 import { Card } from "@/components/ui/card";
@@ -26,7 +27,7 @@ const SubscriptionPage = () => {
     const {
       data: { order },
     } = await axios.post(
-      `${payment_service}/api/payment/checkout`,
+      `${API.PAYMENT}/api/payment/checkout`,
       {},
       {
         headers: {
@@ -48,7 +49,7 @@ const SubscriptionPage = () => {
 
         try {
           const { data } = await axios.post(
-            `${payment_service}/api/payment/verify`,
+            `${API.PAYMENT}/api/payment/verify`,
             { razorpay_order_id, razorpay_payment_id, razorpay_signature },
             {
               headers: {

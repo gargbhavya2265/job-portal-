@@ -1,5 +1,6 @@
 "use client";
-import { auth_service, useAppData } from "@/context/AppContext";
+import { useAppData } from "@/context/AppContext";
+import { API } from "@/config/api";
 import axios from "axios";
 import { redirect } from "next/navigation";
 import React, { FormEvent, useState } from "react";
@@ -29,10 +30,10 @@ const LoginPage = () => {
 
     setBtnLoading(true);
     try {
-      const { data } = await axios.post(`${auth_service}/api/auth/login`, {
-        email,
-        password,
-      });
+      const { data } = await axios.post(`${API.AUTH}/api/auth/login`, {
+      email,
+      password,
+    });
 
       toast.success(data.message);
 
